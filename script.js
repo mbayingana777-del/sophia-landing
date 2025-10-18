@@ -1,68 +1,91 @@
-const CONFIG = {
-  PHONE: "+18773781832",
-  STATUS_URL: "https://sophia-voice.onrender.com/status",
-  BOOKING_LINK: "https://calendly.com/mbayingana777/call-with-sophia"
-};
-const API_BASE = "https://sophia-voice.onrender.com";
+// === CONFIG (your values) ===
+const API_BASE   = 'https://sophia-voice.onrender.com';           // your backend
+const STATUS_URL = `${API_BASE}/status`;
+const TWILIO_FROM = '+18773781832';                               // your Twilio toll-free
+const BOOKING_URL = 'https://calendly.com/mbayingana777/call-with-sophia';
 
-// Footer year
-document.getElementById("year").textContent = new Date().getFullYear();
+// === helpers ===
+function $(sel){ return document.querySelector(sel); }
+function getUTM() { try { return window.location.search.replace(/^\?/, ''); } catch { return ''; } }
 
-// Call/Text buttons
-document.getElementById("callBtn").href = `tel:${CONFIG.PHONE}`;
-document.getElementById("smsBtn").href  = `sms:${CONFIG.PHONE}?body=${encodeURIComponent("Hi Sophia, I’m interested.")}`;
-
-// Status line
-(async () => {
+// === status check ===
+async function checkStatus() {
+  const el = $('#status');
   try {
-    const r = await fetch(CONFIG.STATUS_URL, { cache: "no-store" });
-    const s = await r.json();
-    document.getElementById("status").textContent =
-      `Server ${s.server} • OpenAI ${s.openai} • Sheets ${s.sheets}`;
+    const res = await fetch(STATUS_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('bad status');
+    const data = await res.json();
+    const ok = data.server === 'OK' && data.sheets === 'OK';
+    el.textContent = ok ? 'All systems go ✅' : 'Degraded ⚠️';
   } catch {
-    document.getElementById("status").textContent = "Status unavailable";
+    el.textContent = 'Offline ❌';
   }
-})();
-
-// "Try a sample message" opens SMS with prefill
-const tryForm = document.getElementById("tryForm");
-if (tryForm) {
-  tryForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const msg = (document.getElementById("tryMsg").value || "Hi Sophia, I’m interested.").trim();
-    window.location.href = `sms:${CONFIG.PHONE}?body=${encodeURIComponent(msg)}`;
-  });
 }
 
-// Calendly embed
-document.getElementById("calFrame").src = CONFIG.BOOKING_LINK;
+// === call & sms buttons ===
+function wireButtons() {
+  // tel: and sms: schemes open the dialer / messages apps
+  $('#callBtn').setAttribute('href', `tel:${TWILIO_FROM}`);
+  $('#smsBtn').setAttribute('href', `sms:${TWILIO_FROM}`);
+}
 
-// ✅ NEW: Web-lead form → POST to your backend /web-lead
-const leadForm = document.getElementById("leadForm");
-if (leadForm) {
-  leadForm.addEventListener("submit", async (e) => {
+// === booking embed ===
+function loadBooking() {
+  const frame = $('#calFrame');
+  if (frame) frame.src = BOOKING_URL;
+}
+
+// === lead form -> POST /web-lead ===
+function wireLeadForm() {
+  const form = $('#leadForm');
+  const msg  = $('#leadMsg');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name  = document.getElementById("lfName").value.trim();
-    const phone = document.getElementById("lfPhone").value.trim();
-    const note  = document.getElementById("lfNote").value.trim();
-    const msgEl = document.getElementById("leadMsg");
+    msg.textContent = 'Sending…';
+
+    const name    = $('#leadName').value.trim();
+    const phone   = $('#leadPhone').value.trim();
+    const message = $('#leadMessage').value.trim();
+    const utm     = getUTM();
+
+    if (!name || !phone || !message) {
+      msg.textContent = 'Please fill in all fields.';
+      return;
+    }
 
     try {
-      const res  = await fetch(`${API_BASE}/web-lead`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, note })
+      const res = await fetch(`${API_BASE}/web-lead`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, message, utm })
       });
+
+      if (!res.ok) throw new Error('network');
+
       const data = await res.json();
-      if (data.ok) {
-        msgEl.textContent = "✅ Message sent! Sophia will follow up soon.";
-        leadForm.reset();
+      if (data && data.ok) {
+        msg.textContent = 'Thanks! We got your message.';
+        form.reset();
       } else {
-        msgEl.textContent = data.error || "⚠️ Something went wrong. Please try again.";
+        msg.textContent = 'Network error — please retry.';
       }
-    } catch {
-      msgEl.textContent = "Network error — please retry.";
+    } catch (_) {
+      msg.textContent = 'Network error — please retry.';
     }
   });
 }
+
+// === footer year ===
+function setYear(){ const y=$('#year'); if (y) y.textContent = new Date().getFullYear(); }
+
+// === init ===
+document.addEventListener('DOMContentLoaded', () => {
+  setYear();
+  wireButtons();
+  loadBooking();
+  wireLeadForm();
+  checkStatus();
+});
 
