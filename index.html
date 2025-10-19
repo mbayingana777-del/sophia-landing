@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sophia Voice AI Receptionist</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./style.css"/>
+  <meta name="description" content="Sophia — AI receptionist that books, texts, and calls back instantly."/>
 </head>
 <body>
 
@@ -26,17 +27,17 @@
   <section id="book" class="book">
     <h2>Book a 10-Minute Demo</h2>
     <div class="cal">
-      <iframe id="calFrame" frameborder="0" allowtransparency="true"></iframe>
+      <iframe id="calFrame" frameborder="0" allowtransparency="true" style="width:100%;min-height:620px;"></iframe>
     </div>
   </section>
 
-  <!-- ✅ Lead form already included -->
+  <!-- Lead form -->
   <section id="lead">
     <h2>Leave a Message</h2>
     <form id="leadForm" class="lead-form">
-      <input id="leadName" placeholder="Your name" required />
-      <input id="leadPhone" placeholder="Your phone" required />
-      <input id="leadMessage" placeholder="Your message" required />
+      <input id="leadName" placeholder="Your name" required/>
+      <input id="leadPhone" placeholder="Your phone" required/>
+      <input id="leadMessage" placeholder="Your message" required/>
       <button class="btn" type="submit">Send</button>
     </form>
     <p id="leadMsg" class="hint" style="min-height:20px;margin-top:8px;"></p>
@@ -57,6 +58,7 @@
     <a href="mailto:hello@sophiavoice.ai">hello@sophiavoice.ai</a>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- ✅ Best-option loader: correct relative path + cache-bust + defer -->
+  <script src="./script.js?v=1.0.0" defer></script>
 </body>
 </html>
