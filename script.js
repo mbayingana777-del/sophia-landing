@@ -1,4 +1,4 @@
-// === CONFIG-DRIVEN PROFILES ===
+// ===== CONFIG-DRIVEN PROFILES =====
 const PROFILES = {
   realestate: {
     brand: "Sophia Voice",
@@ -28,42 +28,39 @@ Msg&data rates may apply. Reply STOP to opt out.`
   }
 };
 
-// pick profile from URL ?niche=realestate|medspa|hvac
+// Pick profile from URL ?niche=realestate|medspa|hvac
 function getParam(name){ return new URLSearchParams(location.search).get(name); }
 const NICHE = (getParam('niche') || 'realestate').toLowerCase();
 const CFG = PROFILES[NICHE] || PROFILES.realestate;
 
-// === BACKEND ===
-const API_BASE   = 'https://script.google.com/macros/s/XXXXX/exec'; // your GAS URL
+// ===== BACKEND (your Apps Script Web App) =====
+const API_BASE   = 'https://script.google.com/macros/s/AKfycby3_M3El1gq_D8n5qqCR7yADqIAZXhP0_YWAhjVpslcQrn16TDCSFjyuVMy893OQFHi/exec';
 const STATUS_URL = `${API_BASE}?route=status`;
 
-// === helpers ===
+// ===== helpers =====
 function $(sel){ return document.querySelector(sel); }
-function getUTM() { try { return window.location.search.replace(/^\?/, ''); } catch { return ''; } }
+function getUTM(){ try { return window.location.search.replace(/^\?/, ''); } catch { return ''; } }
 
-// === wire dynamic copy ===
+// ===== dynamic copy/branding =====
 function applyBranding(){
-  // header
   const h1 = document.querySelector('header h1');
   const p  = document.querySelector('header p');
-  if (h1) h1.textContent = `Meet ${CFG.brand.split(' ')[0]}`; // "Meet Sophia" stays snappy
+  if (h1) h1.textContent = `Meet ${CFG.brand.split(' ')[0]}`;
   if (p)  p.textContent  = CFG.tagline;
 
-  // consent
   const consent = document.querySelector('#consent p');
   if (consent) consent.textContent = CFG.consent;
 
-  // footer brand
   const footer = document.querySelector('.footer div');
   if (footer) footer.innerHTML = `© <span id="year"></span> ${CFG.brand}`;
 }
 
-// === status check ===
-async function checkStatus() {
+// ===== status check (simple GET => no preflight) =====
+async function checkStatus(){
   const el = $('#status');
   try {
-    const res = await fetch(STATUS_URL, { cache: 'no-store' }); // simple GET
-    if (!res.ok) throw new Error('bad status');
+    const res = await fetch(STATUS_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     const ok = String(data.server).toUpperCase() === 'OK' && String(data.sheets).toUpperCase() === 'OK';
     el.textContent = ok ? 'All systems go ✅' : 'Degraded ⚠️';
@@ -73,20 +70,20 @@ async function checkStatus() {
   }
 }
 
-// === call & sms buttons ===
-function wireButtons() {
+// ===== call & sms buttons =====
+function wireButtons(){
   $('#callBtn')?.setAttribute('href', `tel:${CFG.twilioFrom}`);
   $('#smsBtn')?.setAttribute('href', `sms:${CFG.twilioFrom}`);
 }
 
-// === booking embed ===
-function loadBooking() {
+// ===== booking embed =====
+function loadBooking(){
   const frame = $('#calFrame');
   if (frame) frame.src = CFG.calendlyUrl;
 }
 
-// === lead form -> POST /web-lead (NO PREFLIGHT) ===
-function wireLeadForm() {
+// ===== lead form -> POST /web-lead (NO PREFLIGHT) =====
+function wireLeadForm(){
   const form = $('#leadForm');
   const msg  = $('#leadMsg');
   if (!form) return;
@@ -108,7 +105,7 @@ function wireLeadForm() {
     try {
       const res = await fetch(`${API_BASE}?route=web-lead&niche=${encodeURIComponent(NICHE)}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain' }, // avoids preflight
+        headers: { 'Content-Type': 'text/plain' }, // avoid CORS preflight
         body: JSON.stringify({ name, phone, message, utm })
       });
 
@@ -128,10 +125,10 @@ function wireLeadForm() {
   });
 }
 
-// === footer year ===
-function setYear(){ const y=$('#year'); if (y) y.textContent = new Date().getFullYear(); }
+// ===== footer year =====
+function setYear(){ const y = $('#year'); if (y) y.textContent = new Date().getFullYear(); }
 
-// === init ===
+// ===== init =====
 document.addEventListener('DOMContentLoaded', () => {
   applyBranding();
   setYear();
