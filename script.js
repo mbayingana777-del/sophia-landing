@@ -55,14 +55,39 @@ function applyBranding(){
   if (footer) footer.innerHTML = `© <span id="year"></span> ${CFG.brand}`;
 }
 
-// ===== status check (simple GET => no preflight) =====
+// ===== tolerant status check (works with JSON or OK text) =====
 async function checkStatus(){
   const el = $('#status');
+
+  // helper: GET with timeout
+  const withTimeout = (url, ms = 6000) => {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { cache: 'no-store', signal: ctrl.signal })
+      .finally(() => clearTimeout(t));
+  };
+
   try {
-    const res = await fetch(STATUS_URL, { cache: 'no-store' });
+    // try once, retry after 1.2s for cold starts
+    let res;
+    try { res = await withTimeout(STATUS_URL, 6000); }
+    catch { await new Promise(r => setTimeout(r, 1200)); res = await withTimeout(STATUS_URL, 6000); }
+
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    const ok = String(data.server).toUpperCase() === 'OK' && String(data.sheets).toUpperCase() === 'OK';
+
+    // Try JSON first
+    let ok = false;
+    try {
+      const data = await res.json();
+      const server = String(data.server || '').toUpperCase();
+      const sheets = String(data.sheets || '').toUpperCase();
+      ok = server === 'OK' && (!sheets || sheets === 'OK');
+    } catch {
+      // Fallback: treat any 200 text containing "OK" as up
+      const txt = await res.text();
+      ok = /OK/i.test(txt);
+    }
+
     el.textContent = ok ? 'All systems go ✅' : 'Degraded ⚠️';
   } catch (e) {
     console.error('Status error:', e);
