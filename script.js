@@ -1,41 +1,27 @@
 // === CONFIG (your values) ===
-const API_BASE   = 'https://sophia-voice.onrender.com';           // your backend
-const STATUS_URL = `${API_BASE}/status`;
-const TWILIO_FROM = '+18773781832';                               // your Twilio toll-free
+const API_BASE   = 'https://script.google.com/macros/s/XXXXX/exec'; // <-- your GAS web app URL (no trailing slash)
+const STATUS_URL = `${API_BASE}?route=status`;
+const TWILIO_FROM = '+18773781832';
 const BOOKING_URL = 'https://calendly.com/mbayingana777/call-with-sophia';
 
-// === helpers ===
-function $(sel){ return document.querySelector(sel); }
-function getUTM() { try { return window.location.search.replace(/^\?/, ''); } catch { return ''; } }
+// ... keep your helpers ...
 
 // === status check ===
 async function checkStatus() {
   const el = $('#status');
   try {
-    const res = await fetch(STATUS_URL, { cache: 'no-store' });
+    const res = await fetch(STATUS_URL, { cache: 'no-store' }); // simple GET => no preflight
     if (!res.ok) throw new Error('bad status');
     const data = await res.json();
-    const ok = data.server === 'OK' && data.sheets === 'OK';
+    const ok = String(data.server).toUpperCase() === 'OK' && String(data.sheets).toUpperCase() === 'OK';
     el.textContent = ok ? 'All systems go ✅' : 'Degraded ⚠️';
-  } catch {
+  } catch (e) {
+    console.error('Status error:', e);
     el.textContent = 'Offline ❌';
   }
 }
 
-// === call & sms buttons ===
-function wireButtons() {
-  // tel: and sms: schemes open the dialer / messages apps
-  $('#callBtn').setAttribute('href', `tel:${TWILIO_FROM}`);
-  $('#smsBtn').setAttribute('href', `sms:${TWILIO_FROM}`);
-}
-
-// === booking embed ===
-function loadBooking() {
-  const frame = $('#calFrame');
-  if (frame) frame.src = BOOKING_URL;
-}
-
-// === lead form -> POST /web-lead ===
+// === lead form -> POST web-lead (NO PREFLIGHT) ===
 function wireLeadForm() {
   const form = $('#leadForm');
   const msg  = $('#leadMsg');
@@ -56,36 +42,25 @@ function wireLeadForm() {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/web-lead`, {
+      const res = await fetch(`${API_BASE}?route=web-lead`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // IMPORTANT: text/plain avoids CORS preflight; GAS will parse raw body
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ name, phone, message, utm })
       });
 
       if (!res.ok) throw new Error('network');
-
       const data = await res.json();
+
       if (data && data.ok) {
         msg.textContent = 'Thanks! We got your message.';
         form.reset();
       } else {
-        msg.textContent = 'Network error — please retry.';
+        msg.textContent = 'Error — please retry.';
       }
-    } catch (_) {
+    } catch (err) {
+      console.error('Lead error:', err);
       msg.textContent = 'Network error — please retry.';
     }
   });
 }
-
-// === footer year ===
-function setYear(){ const y=$('#year'); if (y) y.textContent = new Date().getFullYear(); }
-
-// === init ===
-document.addEventListener('DOMContentLoaded', () => {
-  setYear();
-  wireButtons();
-  loadBooking();
-  wireLeadForm();
-  checkStatus();
-});
-
