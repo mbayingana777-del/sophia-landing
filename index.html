@@ -2,63 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sophia Voice AI Receptionist</title>
-  <link rel="stylesheet" href="./style.css"/>
-  <meta name="description" content="Sophia — AI receptionist that books, texts, and calls back instantly."/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sophia – AI Receptionist</title>
+  <meta name="description" content="Sophia: 24/7 AI receptionist that books, texts, and calls back instantly." />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#0f1220; color:#e9ecff; }
+    header { padding: 48px 20px; text-align:center; max-width:900px; margin:0 auto; }
+    header h1 { margin: 0 0 12px; font-size: 2.4rem; letter-spacing: .5px; }
+    header p { margin: 0; opacity: .85; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; display:grid; gap:24px; grid-template-columns: 1fr; }
+    .card { background:#171a2e; border:1px solid #252a4a; border-radius:16px; padding:20px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    a.btn { display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid #3a4180; text-decoration:none; color:#e9ecff; }
+    a.btn:hover { border-color:#6f79ff; }
+    label { font-size:.95rem; opacity:.85; display:block; margin: 6px 0; }
+    input, textarea { width:100%; padding:12px; border-radius:10px; border:1px solid #2b315a; background:#11142a; color:#e9ecff; }
+    textarea { min-height:110px; resize:vertical; }
+    .status { font-size:.95rem; opacity:.9; }
+    iframe { width:100%; min-height:520px; border:0; border-radius:12px; background:#0f1220; }
+    footer { text-align:center; opacity:.8; padding: 24px 12px 50px; }
+    small.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  </style>
 </head>
 <body>
-
   <header>
     <h1>Meet Sophia</h1>
-    <p>Your 24/7 AI receptionist that books, texts, and calls back instantly.</p>
+    <p>24/7 AI receptionist that books, texts, and calls back instantly.</p>
+    <div style="margin-top:14px" class="status">
+      System status: <strong id="status">Checking…</strong>
+    </div>
+    <div style="margin-top:18px" class="row">
+      <a id="callBtn" class="btn" href="tel:+18773781832">📞 Call</a>
+      <a id="smsBtn" class="btn" href="sms:+18773781832">💬 Text</a>
+    </div>
   </header>
 
-  <section id="statusSection">
-    <h3>System Status:</h3>
-    <p id="status">Checking...</p>
-  </section>
+  <main class="wrap">
+    <section class="card">
+      <h3 style="margin-top:0">Book a time</h3>
+      <iframe id="calFrame" title="Calendly"></iframe>
+    </section>
 
-  <section id="actions">
-    <a id="callBtn" class="btn">📞 Call Sophia</a>
-    <a id="smsBtn" class="btn">💬 Text Sophia</a>
-  </section>
+    <section class="card">
+      <h3 style="margin-top:0">Tell us what you need</h3>
+      <form id="leadForm">
+        <label>Name
+          <input id="leadName" type="text" placeholder="Jane Doe" autocomplete="name" required />
+        </label>
+        <label>Phone
+          <input id="leadPhone" type="tel" placeholder="+1 555 123 4567" autocomplete="tel" required />
+        </label>
+        <label>Message
+          <textarea id="leadMessage" placeholder="I need to schedule a showing…" required></textarea>
+        </label>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" type="submit">Send</button>
+          <span id="leadMsg" class="status"></span>
+        </div>
+      </form>
+    </section>
 
-  <section id="book" class="book">
-    <h2>Book a 10-Minute Demo</h2>
-    <div class="cal">
-      <iframe id="calFrame" frameborder="0" allowtransparency="true" style="width:100%;min-height:620px;"></iframe>
-    </div>
-  </section>
-
-  <!-- Lead form -->
-  <section id="lead">
-    <h2>Leave a Message</h2>
-    <form id="leadForm" class="lead-form">
-      <input id="leadName" placeholder="Your name" required/>
-      <input id="leadPhone" placeholder="Your phone" required/>
-      <input id="leadMessage" placeholder="Your message" required/>
-      <button class="btn" type="submit">Send</button>
-    </form>
-    <p id="leadMsg" class="hint" style="min-height:20px;margin-top:8px;"></p>
-  </section>
-
-  <section id="consent" class="consent">
-    <h2>Message Consent Policy</h2>
-    <p>
-      By submitting your name, phone number, or message through this website or by texting/calling
-      our toll-free number (+1 877-378-1832), you consent to receive SMS and voice communications
-      from Sophia Voice, our AI receptionist assistant. Message frequency may vary.
-      Message and data rates may apply. Reply STOP to unsubscribe at any time.
-    </p>
-  </section>
+    <section id="consent" class="card">
+      <p style="margin:0; opacity:.9">
+        By submitting, you consent to receive SMS/voice communications from Sophia.
+      </p>
+    </section>
+  </main>
 
   <footer class="footer">
     <div>© <span id="year"></span> Sophia Voice</div>
-    <a href="mailto:hello@sophiavoice.ai">hello@sophiavoice.ai</a>
+    <div style="margin-top:8px"><small class="mono">v1.0</small></div>
   </footer>
 
-  <!-- Correct relative path + cache bust + defer -->
-  <script src="./script.js?v=1.0.1" defer></script>
+  <!-- External JS only (no inline JS to avoid CSP issues) -->
+  <script src="./script.js" defer></script>
 </body>
 </html>
