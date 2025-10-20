@@ -35,7 +35,7 @@ const CFG = PROFILES[NICHE] || PROFILES.realestate;
 
 // ===== BACKEND (Google Apps Script Web App) =====
 // >>> REPLACE with your deployed Web App URL (must end with /exec)
-const API_BASE   = 'PASTE_YOUR_WEB_APP_URL_HERE/exec';
+const API_BASE   = 'https://script.google.com/macros/s/AKfycbyaGwr8K-BuS3Ff4Un4C19IoKwsfH0uufs6BzB54-7HrStenBkYZIbZdeJ1Vi9SbaaV/exec';
 const STATUS_URL = `${API_BASE}?route=status`;
 
 // ===== helpers =====
