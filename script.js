@@ -33,8 +33,9 @@ function getParam(name){ return new URLSearchParams(location.search).get(name); 
 const NICHE = (getParam('niche') || 'realestate').toLowerCase();
 const CFG = PROFILES[NICHE] || PROFILES.realestate;
 
-// ===== BACKEND (your Apps Script Web App) =====
-const API_BASE   = 'https://script.google.com/macros/s/AKfycby3_M3El1gq_D8n5qqCR7yADqIAZXhP0_YWAhjVpslcQrn16TDCSFjyuVMy893OQFHi/exec';
+// ===== BACKEND (Google Apps Script Web App) =====
+// >>> REPLACE with your deployed Web App URL (must end with /exec)
+const API_BASE   = 'PASTE_YOUR_WEB_APP_URL_HERE/exec';
 const STATUS_URL = `${API_BASE}?route=status`;
 
 // ===== helpers =====
@@ -59,7 +60,6 @@ function applyBranding(){
 async function checkStatus(){
   const el = $('#status');
 
-  // helper: GET with timeout
   const withTimeout = (url, ms = 6000) => {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), ms);
@@ -68,14 +68,12 @@ async function checkStatus(){
   };
 
   try {
-    // try once, retry after 1.2s for cold starts
     let res;
     try { res = await withTimeout(STATUS_URL, 6000); }
     catch { await new Promise(r => setTimeout(r, 1200)); res = await withTimeout(STATUS_URL, 6000); }
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    // Try JSON first
     let ok = false;
     try {
       const data = await res.json();
@@ -83,7 +81,6 @@ async function checkStatus(){
       const sheets = String(data.sheets || '').toUpperCase();
       ok = server === 'OK' && (!sheets || sheets === 'OK');
     } catch {
-      // Fallback: treat any 200 text containing "OK" as up
       const txt = await res.text();
       ok = /OK/i.test(txt);
     }
@@ -134,7 +131,7 @@ function wireLeadForm(){
         body: JSON.stringify({ name, phone, message, utm })
       });
 
-      if (!res.ok) throw new Error('network');
+      if (!res.ok) throw new Error(`network ${res.status}`);
       const data = await res.json();
 
       if (data && data.ok) {
