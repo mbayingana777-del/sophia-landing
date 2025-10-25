@@ -119,3 +119,16 @@ footer {
 small.mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
+/* === SPACING FIX === */
+header {
+  padding: 30px 20px; /* reduce top space */
+}
+
+.hero {
+  padding: 40px 20px; /* tighten hero section */
+  margin-top: -20px; /* pulls hero closer to header */
+}
+
+main.wrap {
+  margin-top: -30px; /* reduces gap before main content */
+}
