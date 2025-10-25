@@ -9,97 +9,87 @@
 </head>
 <body>
 
-  <!-- ===== VIEW 1: HERO ===== -->
-  <header class="header">
-    <img src="assets/icons/logo.svg" alt="Sophia AI Logo" width="120">
-    <h1>Meet Sophia</h1>
-    <p>Your 24/7 AI receptionist that books, texts, and calls back instantly.</p>
-  </header>
+  <!-- ===== VIEW 1 ===== -->
+  <header class="hero-wrap">
+    <img class="brand-badge" src="assets/icons/logo.svg" alt="Sophia logo" />
+    <h1 class="hero-title">Meet Sophia</h1>
+    <p class="hero-kicker">Your 24/7 AI receptionist that books, texts, and calls<br/>back instantly.</p>
 
-  <section class="hero">
-    <h2 class="hero-h2">
+    <h2 class="hero-claim">
       Turn <span class="hl-bad">missed calls</span> into
       <span class="hl-good">booked appointments</span>
     </h2>
+
     <p class="hero-sub">
-      Sophia responds instantly with text, voice, or form follow-ups — keeping your business available 24/7.
+      Sophia responds instantly with text, voice, or form follow-ups<br/>
+      — keeping your business available 24/7.
     </p>
-    <a href="https://calendly.com/YOUR-LINK" class="btn primary">Book a Demo</a>
-  </section>
 
-  <!-- Scroll cue at the very bottom of View 1 -->
-  <section class="scroll-cue soft">
-    <a href="#view2" class="scroll-link dark">
-      <span>See available times</span>
-      <span class="arrow">↓</span>
-    </a>
-  </section>
+    <a class="btn primary hero-cta" href="https://calendly.com/YOUR-LINK">Book a Demo</a>
 
-  <!-- ===== VIEW 2: BOOK + FORM + CONSENT ===== -->
+    <div class="scroll-cue">
+      <a class="scroll-link" href="#view2">See available times</a>
+      <div class="scroll-arrow">↓</div>
+    </div>
+  </header>
+
+  <!-- ===== VIEW 2 ===== -->
   <main id="view2" class="view2">
-    <section class="panel grid-two">
-      <!-- Left: Calendar (~55%) -->
-      <div class="cal-col card cal-card">
-        <h3 class="section-title">Book a time</h3>
-        <!-- Put your real Calendly scheduling URL below -->
-        <iframe
-          id="calFrame"
-          title="Calendly"
-          src="https://calendly.com/YOUR-LINK?hide_gdpr_banner=1"
-          loading="lazy"
-        ></iframe>
-      </div>
-
-      <!-- Right: Compact form (~45%) -->
-      <div class="form-col card compact-form">
-        <h3 class="section-title">Tell us what you need</h3>
-        <form id="leadForm">
-          <label>Name
-            <input id="leadName" type="text" placeholder="Jane Doe" autocomplete="name" required />
-          </label>
-          <label>Phone
-            <input id="leadPhone" type="tel" placeholder="+1 555 123 4567" autocomplete="tel" required />
-          </label>
-          <label>Message
-            <textarea id="leadMessage" placeholder="I need to schedule a showing…" required></textarea>
-          </label>
-          <div class="row form-actions">
-            <button class="btn" type="submit">Send</button>
-            <span id="leadMsg" class="status"></span>
-          </div>
-        </form>
-      </div>
+    <section class="book-card">
+      <h3 class="section-h">Book a time</h3>
+      <iframe
+        id="calFrame"
+        title="Calendly"
+        src="https://calendly.com/YOUR-LINK?hide_gdpr_banner=1"
+        loading="lazy"
+      ></iframe>
     </section>
 
-    <!-- Consent text full width -->
-    <section class="card consent">
+    <section class="form-card">
+      <h3 class="section-h">Tell us what you need</h3>
+
+      <form id="leadForm" class="lead-form">
+        <label>Name
+          <input id="leadName" type="text" placeholder="Jane Doe" autocomplete="name" required />
+        </label>
+
+        <label>Phone
+          <input id="leadPhone" type="tel" placeholder="+1 565 123 4567" autocomplete="tel" required />
+        </label>
+
+        <label>Message
+          <textarea id="leadMessage" placeholder="I need to schedule a showing…" required></textarea>
+        </label>
+
+        <button class="btn primary" type="submit">Send</button>
+        <span id="leadMsg" class="status"></span>
+      </form>
+    </section>
+
+    <section class="consent-card">
       <p>
-        By submitting your name, phone number, or message through this website or by texting/calling our toll-free
-        number (+1 877-378-1832), you consent to receive SMS and voice communications from Sophia Voice, our AI
-        receptionist assistant. Message frequency may vary. Message and data rates may apply. Reply STOP to
-        unsubscribe at any time.
+        By submitting your name, phone number, or message through this website or by
+        texting/calling our toll-free number (+1 877-378-1832), you consent to receive SMS
+        and voice communications from Sophie Voice, our AI receptionist assistant. Message
+        frequency may vary. Message and data rates may apply. Reply STOP to unsubscribe
+        at any time.
       </p>
     </section>
   </main>
 
   <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="trust-footer">
-      <span>Powered by</span>
-      <img src="assets/icons/twilio.svg" alt="Twilio">
-      <img src="assets/icons/google.svg" alt="Google">
-      <img src="assets/icons/stripe.svg" alt="Stripe">
+  <footer class="site-footer">
+    <div class="powered">
+      Powered by
+      <img src="assets/icons/twilio.svg" alt="Twilio" />
+      <img src="assets/icons/google.svg" alt="Google" />
+      <img src="assets/icons/stripe.svg" alt="Stripe" />
     </div>
-
-    <div>© 2025 Sophia Voice</div>
-    <div style="margin-top:8px"><small class="mono">v1.0</small></div>
+    <div class="legal">
+      © 2025 Sophia Voice
+      <div class="ver">v1.0</div>
+    </div>
   </footer>
 
-</body>
-</html>
-
-
-  <!-- External JS only (no inline JS to avoid CSP issues) -->
-  <script src="./script.js" defer></script>
 </body>
 </html>
