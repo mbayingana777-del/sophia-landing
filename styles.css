@@ -1,30 +1,30 @@
-/* ===== Core tokens ===== */
+/* =========================================================
+   Tokens & base styles
+   ========================================================= */
 :root{
-  --bg: #0b0f1d;            /* slightly deeper than before for contrast */
+  --bg: #0b0f1d;
   --panel: #12172a;
   --line: #23294a;
   --text: #eef0ff;
   --muted: #bfc6ea;
-  --brand: #7a66f6;         /* button purple */
+  --brand: #7a66f6;
   --brand-hover: #8a79ff;
 
-  --bad: #ff3b3b;           /* missed calls */
-  --good: #00d26a;          /* booked appointments */
+  --bad: #ff3b3b;   /* missed calls */
+  --good: #00d26a;  /* booked appointments */
 
-  --w-max: 860px;           /* content width used in screenshots */
+  --w-max: 860px;   /* content width */
 }
 
-/* ===== Reset / base ===== */
 *{ box-sizing:border-box }
-html,body{ margin:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, "Segoe UI", Inter, Roboto, Arial, sans-serif; }
+html,body{ margin:0; background:var(--bg); color:var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Inter, Roboto, Arial, sans-serif; }
 html{ scroll-behavior:smooth }
+a{ color:inherit; text-decoration:none }
 
-/* Helpers */
-.center{ text-align:center }
-
-/* ===== Buttons ===== */
+/* Buttons */
 .btn{
-  display:inline-block; text-decoration:none; cursor:pointer;
+  display:inline-block; cursor:pointer;
   border:1px solid var(--line); color:var(--text); background:transparent;
   padding:12px 18px; border-radius:12px; transition:.18s ease; font-weight:600;
 }
@@ -32,95 +32,130 @@ html{ scroll-behavior:smooth }
 .btn.primary{ background:var(--brand); border-color:var(--brand); color:#fff }
 .btn.primary:hover{ background:var(--brand-hover); border-color:var(--brand-hover) }
 
-/* Make the hero fill the screen and push the scroll cue to the bottom */
+/* =========================================================
+   🟣 HERO SECTION (Top of page)
+   Logo, headline, subheadline, CTA, and scroll indicator.
+   ========================================================= */
 .hero-wrap{
   max-width: var(--w-max);
   margin: 0 auto;
-  padding: 32px 20px 0;
+  padding: 28px 20px 0;
   text-align: center;
-  min-height: calc(100vh - 16px);
+
+  /* Full-height column so the scroll cue sits at the bottom.
+     We intentionally leave a small gap so the next section
+     title "Book a time" peeks above the fold. */
+  min-height: calc(100vh - 42px);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.brand-badge{ margin-top: 8px; }
-
-.scroll-cue{
-  margin-top: auto;
-  padding: 12px 0 18px;
+.brand-badge{
+  width:140px; height:140px; border-radius:12px;
+  background:#6f63f0; display:inline-block; object-fit:contain;
+  margin-top: 6px;
 }
 
-.hero-title{ margin: 20px 0 10px; }
-.hero-kicker{ margin: 0 0 22px; }
-.hero-claim{ margin: 4px 0 8px; }
-.hero-sub{ margin: 6px auto 18px; }
-.hero-cta{ margin-top: 6px; }
+.hero-title{
+  margin: 18px 0 10px;
+  font-size: 56px; line-height: 1.06; letter-spacing:.2px; font-weight: 800;
+}
 
+.hero-kicker{
+  margin: 0 0 20px; color: var(--muted);
+  font-size: 20px; line-height: 1.45;
+}
 
-/* ===== VIEW 2 ===== */
-.view2{
-  max-width:var(--w-max);
-  margin:24px auto 40px auto;
-  padding:0 20px;
+.hero-claim{
+  margin: 2px 0 8px;
+  font-size: 28px; line-height: 1.25; font-weight: 800;
+}
+.hl-bad{ color: var(--bad); }
+.hl-good{ color: var(--good); }
+
+.hero-sub{
+  margin: 6px auto 16px; color:#cfd5fb;
+  font-size: 18px; line-height: 1.55; max-width: 720px;
+}
+
+.hero-cta{ margin-top: 6px; font-size: 18px; }
+
+/* Scroll cue anchored at the bottom of the hero */
+.scroll-cue{
+  margin-top: auto;            /* pushes it down */
+  padding: 16px 0 18px;        /* bottom safety so arrow never clips */
+}
+.scroll-link{
+  color:#e9ebff; font-weight:700; font-size:22px;
+}
+.scroll-link:hover{ color:#ffffff }
+.scroll-arrow{
+  font-size:28px; color:#e9ebff; margin-top:8px;
+}
+
+/* =========================================================
+   🟢 BOOKING SECTION (Below the fold)
+   Calendly booking, intake form, consent, and footer logos.
+   ========================================================= */
+.booking-wrap{
+  max-width: var(--w-max);
+  margin: 0 auto 40px;
+  padding: 0 20px;
 }
 
 /* Book a time card */
 .book-card{
-  background:transparent;
   text-align:center;
-  margin-bottom:26px;
+  margin: 8px 0 26px;     /* leaves a small peek above fold */
 }
 .section-h{
-  font-size:32px; font-weight:800; margin:0 0 18px 0;
+  font-size: 32px; font-weight: 800; margin: 0 0 16px 0;
 }
 #calFrame{
-  width:560px; max-width:100%;
-  height:420px; /* tuned to screenshot scale */
-  border:1px solid var(--line); border-radius:12px; background:var(--panel);
+  width: 560px; max-width: 100%;
+  height: 420px;                        /* tuned to match reference look */
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
 }
 
 /* Form card */
-.form-card{
-  background:transparent;
-  margin-top:14px;
-}
-.lead-form{
-  max-width:var(--w-max);
-  margin:0 auto;
-}
+.form-card{ margin-top: 12px; }
+.lead-form{ max-width: var(--w-max); margin: 0 auto; }
 .lead-form label{
-  display:block; margin:12px 0 10px 0; color:#dfe3ff; font-weight:600;
+  display:block; margin: 12px 0 10px; color:#dfe3ff; font-weight:600;
 }
 .lead-form input, .lead-form textarea{
   width:100%;
-  padding:16px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  color:var(--text);
-  font-size:18px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 18px;
 }
-.lead-form textarea{ min-height:120px; resize:vertical }
-.lead-form .btn{ margin-top:16px }
+.lead-form textarea{ min-height: 120px; resize: vertical; }
+.lead-form .btn{ margin-top: 16px; }
+.status{ font-size: .95rem; opacity: .9; margin-left: 10px; }
 
-/* Consent card */
+/* Consent */
 .consent-card{
-  margin-top:22px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:16px;
-  padding:22px 22px;
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 16px;
+  padding: 22px;
 }
 .consent-card p{
-  margin:0; color:#e3e6ff; line-height:1.75; font-size:18px;
+  margin: 0; color: #e3e6ff; line-height: 1.75; font-size: 18px;
 }
 
 /* Footer */
 .site-footer{
   text-align:center;
-  padding:26px 16px 42px 16px;
-  color:#cbd2ff;
+  padding: 26px 16px 42px;
+  color: #cbd2ff;
 }
 .powered{
   display:inline-flex; align-items:center; gap:14px;
@@ -130,11 +165,13 @@ html{ scroll-behavior:smooth }
 .legal{ margin-top:4px }
 .ver{ opacity:.8; font-size:12px }
 
-/* ===== Responsive ===== */
+/* =========================================================
+   Responsive tweaks
+   ========================================================= */
 @media (max-width: 720px){
-  .hero-title{ font-size:44px }
-  .hero-claim{ font-size:24px }
-  .scroll-link{ font-size:20px }
-  .scroll-arrow{ font-size:26px }
-  #calFrame{ height:460px }
+  .hero-title{ font-size: 44px; }
+  .hero-claim{ font-size: 24px; }
+  .scroll-link{ font-size: 20px; }
+  .scroll-arrow{ font-size: 26px; }
+  #calFrame{ height: 460px; }
 }
