@@ -132,3 +132,30 @@ header {
 main.wrap {
   margin-top: -30px; /* reduces gap before main content */
 }
+/* === TRUST STRIP === */
+.trust-strip {
+  background: #11142a;
+  border-top: 1px solid #252a4a;
+  border-bottom: 1px solid #252a4a;
+  padding: 16px 0;
+  text-align: center;
+}
+
+.trust-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  color: #a7b4c8;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.trust-container img {
+  height: 24px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.trust-container img:hover {
+  opacity: 1;
+}
