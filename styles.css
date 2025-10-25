@@ -68,11 +68,24 @@ a{ color:inherit; text-decoration:none }
 }
 
 .hero-claim{
-  margin: 2px 0 8px;
-  font-size: 28px; line-height: 1.25; font-weight: 800;
+  margin: 4px 0 12px;
+  font-size: 32px;
+  line-height: 1.3;
+  font-weight: 800;
+  color: #fff;                /* bring back clean white headline look */
+  letter-spacing: 0.2px;
 }
-.hl-bad{ color: var(--bad); }
-.hl-good{ color: var(--good); }
+
+.hl-bad{
+  color: #ff3b3b;             /* brighter red for “missed calls” */
+  font-weight: 800;
+}
+
+.hl-good{
+  color: #00e472;             /* vibrant green for “booked appointments” */
+  font-weight: 800;
+}
+
 
 .hero-sub{
   margin: 6px auto 16px; color:#cfd5fb;
