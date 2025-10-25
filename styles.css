@@ -36,21 +36,19 @@ a{ color:inherit; text-decoration:none }
    🟣 HERO SECTION (Top of page)
    Logo, headline, subheadline, CTA, and scroll indicator.
    ========================================================= */
+/* HERO */
 .hero-wrap{
   max-width: var(--w-max);
   margin: 0 auto;
   padding: 28px 20px 0;
   text-align: center;
 
-  /* Full-height column so the scroll cue sits at the bottom.
-     We intentionally leave a small gap so the next section
-     title "Book a time" peeks above the fold. */
-  min-height: calc(100vh - 42px);
+  /* make the hero fill the entire viewport */
+  min-height: 100vh;             /* was: calc(100vh - 42px) */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 .brand-badge{
   width:140px; height:140px; border-radius:12px;
   background:#6f63f0; display:inline-block; object-fit:contain;
