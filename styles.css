@@ -32,50 +32,31 @@ html{ scroll-behavior:smooth }
 .btn.primary{ background:var(--brand); border-color:var(--brand); color:#fff }
 .btn.primary:hover{ background:var(--brand-hover); border-color:var(--brand-hover) }
 
-/* ===== VIEW 1 ===== */
+/* Make the hero fill the screen and push the scroll cue to the bottom */
 .hero-wrap{
-  max-width:var(--w-max);
-  margin:64px auto 32px auto;
-  padding:0 20px;
-  text-align:center;
+  max-width: var(--w-max);
+  margin: 0 auto;
+  padding: 32px 20px 0;
+  text-align: center;
+  min-height: calc(100vh - 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.brand-badge{
-  width:140px; height:140px; border-radius:12px;
-  background:#6f63f0; display:inline-block; object-fit:contain;
+.brand-badge{ margin-top: 8px; }
+
+.scroll-cue{
+  margin-top: auto;
+  padding: 12px 0 18px;
 }
 
-.hero-title{
-  margin:24px 0 12px 0;
-  font-size:56px; line-height:1.06; letter-spacing:.2px; font-weight:800;
-}
+.hero-title{ margin: 20px 0 10px; }
+.hero-kicker{ margin: 0 0 22px; }
+.hero-claim{ margin: 4px 0 8px; }
+.hero-sub{ margin: 6px auto 18px; }
+.hero-cta{ margin-top: 6px; }
 
-.hero-kicker{
-  margin:0 0 28px 0; color:var(--muted);
-  font-size:20px; line-height:1.45;
-}
-
-.hero-claim{
-  margin:6px 0 10px 0;
-  font-size:28px; line-height:1.25; font-weight:800;
-}
-.hl-bad{ color:var(--bad) }
-.hl-good{ color:var(--good) }
-
-.hero-sub{
-  margin:6px auto 22px auto; color:#cfd5fb;
-  font-size:18px; line-height:1.55; max-width:720px;
-}
-
-.hero-cta{ margin-top:6px; font-size:18px; }
-
-/* Scroll cue (exactly like ref: label then arrow below) */
-.scroll-cue{ margin:34px 0 6px 0; }
-.scroll-link{
-  color:#e9ebff; font-weight:700; text-decoration:none; font-size:22px;
-}
-.scroll-link:hover{ color:#fff }
-.scroll-arrow{ font-size:28px; color:#e9ebff; margin-top:8px }
 
 /* ===== VIEW 2 ===== */
 .view2{
