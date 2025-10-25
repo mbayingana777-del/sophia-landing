@@ -59,7 +59,14 @@ a{ color:inherit; text-decoration:none }
 
 .hero-title{
   margin: 18px 0 10px;
-  font-size: 56px; line-height: 1.06; letter-spacing:.2px; font-weight: 800;
+  font-size: 62px; /* slightly larger, more presence */
+  line-height: 1.05;
+  letter-spacing: 0.4px;
+  font-weight: 900; /* stronger definition */
+  color: #ffffff; /* pure white for clarity */
+  text-shadow: 
+    0 0 15px rgba(140, 110, 255, 0.25), /* subtle purple glow */
+    0 2px 12px rgba(0, 0, 0, 0.4);      /* depth shadow */
 }
 
 .hero-kicker{
