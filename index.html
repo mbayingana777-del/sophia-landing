@@ -8,24 +8,46 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<!-- CHAT WIDGET -->
-<div id="chat-widget">
-  <div id="chat-button">💬</div>
+  <!-- all your existing page content (header, hero, booking, etc.) -->
 
-  <div id="chat-box">
-    <div class="chat-header">
-      <strong>Sophia Assistant</strong>
-      <span id="close-chat">×</span>
-    </div>
-    <div class="chat-body">
-      <p class="placeholder">Start a chat with Sophia...</p>
-    </div>
-    <div class="chat-footer">
-      <input type="text" id="chat-input" placeholder="Type a message..." disabled />
-      <button disabled>➤</button>
+
+  <!-- CHAT WIDGET -->
+  <div id="chat-widget">
+    <div id="chat-button">💬</div>
+
+    <div id="chat-box">
+      <div class="chat-header">
+        <strong>Sophia Assistant</strong>
+        <span id="close-chat">×</span>
+      </div>
+      <div class="chat-body">
+        <p class="placeholder">Start a chat with Sophia...</p>
+      </div>
+      <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Type a message..." disabled />
+        <button disabled>➤</button>
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- place the script BELOW the chat widget, but ABOVE the closing body tag -->
+  <script>
+    const chatBtn = document.getElementById('chat-button');
+    const chatBox = document.getElementById('chat-box');
+    const closeChat = document.getElementById('close-chat');
+
+    chatBtn.addEventListener('click', () => {
+      chatBox.style.display = 'flex';
+      chatBtn.style.display = 'none';
+    });
+
+    closeChat.addEventListener('click', () => {
+      chatBox.style.display = 'none';
+      chatBtn.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>
 
   <!-- =========================================================
        🟣 HERO SECTION (Top of page)
