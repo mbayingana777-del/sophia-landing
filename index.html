@@ -8,46 +8,6 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- all your existing page content (header, hero, booking, etc.) -->
-
-
-  <!-- CHAT WIDGET -->
-  <div id="chat-widget">
-    <div id="chat-button">💬</div>
-
-    <div id="chat-box">
-      <div class="chat-header">
-        <strong>Sophia Assistant</strong>
-        <span id="close-chat">×</span>
-      </div>
-      <div class="chat-body">
-        <p class="placeholder">Start a chat with Sophia...</p>
-      </div>
-      <div class="chat-footer">
-        <input type="text" id="chat-input" placeholder="Type a message..." disabled />
-        <button disabled>➤</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- place the script BELOW the chat widget, but ABOVE the closing body tag -->
-  <script>
-    const chatBtn = document.getElementById('chat-button');
-    const chatBox = document.getElementById('chat-box');
-    const closeChat = document.getElementById('close-chat');
-
-    chatBtn.addEventListener('click', () => {
-      chatBox.style.display = 'flex';
-      chatBtn.style.display = 'none';
-    });
-
-    closeChat.addEventListener('click', () => {
-      chatBox.style.display = 'none';
-      chatBtn.style.display = 'flex';
-    });
-  </script>
-</body>
-</html>
 
   <!-- =========================================================
        🟣 HERO SECTION (Top of page)
@@ -71,7 +31,7 @@
       — keeping your business available 24/7.
     </p>
 
-    <a class="btn primary hero-cta" href="https://calendly.com/YOUR-LINK">Book a Demo</a>
+    <a class="btn primary hero-cta" href="https://calendly.com/mbayingana777/call-with-sophia">Book a Demo</a>
 
     <!-- Scroll cue anchored at bottom of the viewport -->
     <div class="scroll-cue">
@@ -87,16 +47,16 @@
   <main id="booking" class="booking-wrap">
     <section class="book-card">
       <h3 class="section-h">Book a time</h3>
- <iframe
-  id="calFrame"
-  title="Book a time with Sophia"
-  src="https://calendly.com/mbayingana777/call-with-sophia?embed_domain=mbayingana777-del.github.io&embed_type=Inline&hide_event_type_details=1&hide_gdpr_banner=1"
-  width="100%"
-  height="700"
-  frameborder="0"
-  loading="lazy">
-</iframe>
 
+      <iframe
+        id="calFrame"
+        title="Book a time with Sophia"
+        src="https://calendly.com/mbayingana777/call-with-sophia?embed_domain=mbayingana777-del.github.io&embed_type=Inline&hide_event_type_details=1&hide_gdpr_banner=1"
+        width="100%"
+        height="700"
+        frameborder="0"
+        loading="lazy">
+      </iframe>
     </section>
 
     <section class="form-card">
@@ -147,5 +107,49 @@
     </div>
   </footer>
 
+  <!-- =========================================================
+       💬 CHAT WIDGET (bubble + box)
+       ========================================================= -->
+  <div id="chat-widget">
+    <div id="chat-button">💬</div>
+
+    <div id="chat-box">
+      <div class="chat-header">
+        <strong>Sophia Assistant</strong>
+        <span id="close-chat">×</span>
+      </div>
+      <div class="chat-body">
+        <p class="placeholder">Start a chat with Sophia...</p>
+      </div>
+      <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Type a message..." disabled />
+        <button disabled>➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       🧠 CHAT SCRIPT (open/close + animations)
+       ========================================================= -->
+  <script>
+    const chatBtn = document.getElementById('chat-button');
+    const chatBox = document.getElementById('chat-box');
+    const closeChat = document.getElementById('close-chat');
+
+    chatBtn.addEventListener('click', () => {
+      chatBox.style.display = 'flex';
+      chatBox.style.animationName = 'fadeInUp';
+      chatBtn.style.display = 'none';
+    });
+
+    closeChat.addEventListener('click', () => {
+      chatBox.style.animationName = 'fadeOutDown';
+      setTimeout(() => {
+        chatBox.style.display = 'none';
+        chatBtn.style.display = 'flex';
+      }, 300);
+    });
+  </script>
 </body>
 </html>
+
