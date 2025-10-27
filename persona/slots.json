@@ -1,0 +1,15 @@
+{
+  "required": ["name", "phone", "intent"],
+  "optional": ["email", "company", "notes"],
+  "validation": {
+    "phone": "E.164 or 10-digit local; ask to confirm if unsure",
+    "email": "basic email format check"
+  },
+  "intent_types": [
+    "book_appointment",
+    "reschedule",
+    "cancel",
+    "general_question",
+    "sales_inquiry"
+  ]
+}
