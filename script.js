@@ -159,3 +159,68 @@ document.addEventListener('DOMContentLoaded', () => {
   wireLeadForm();
   checkStatus();
 });
+
+
+/* =======================
+   UNIVERSAL PERSONA LOADER
+   ======================= */
+
+// read ?niche=real_estate from the URL (default: real_estate)
+function getNicheFromURL() {
+  const p = new URLSearchParams(window.location.search).get("niche");
+  return (p || "real_estate").toLowerCase().replace(/[^a-z0-9_]/g, "");
+}
+
+async function loadPersona(niche = "real_estate") {
+  const safeJSON = async (path) => {
+    try {
+      const r = await fetch(path);
+      if (!r.ok) return null;
+      return await r.json();
+    } catch {
+      return null;
+    }
+  };
+
+  try {
+    const base     = await safeJSON("persona/base.json");
+    const slots    = await safeJSON("persona/slots.json");
+    const actions  = await safeJSON("persona/actions.json");
+    const prompts  = await fetch("persona/prompts.md").then(r => r.text());
+    const nicheCfg = await safeJSON(`persona/niches/${niche}.json`);
+    const hipaaPack = await safeJSON("persona/packs/hipaa_compliance.json");
+
+    return { base, slots, actions, prompts, niche: nicheCfg, packs: { hipaaPack } };
+  } catch (err) {
+    console.error("Error loading persona:", err);
+    return null;
+  }
+}
+
+function applyPersonaToUI(config) {
+  if (!config || !config.base) return;
+
+  const { base } = config;
+
+  const cal = document.getElementById("calFrame");
+  if (cal && base.booking_link) {
+    const embed = new URL(base.booking_link);
+    embed.searchParams.set("embed_domain", location.hostname || "localhost");
+    embed.searchParams.set("embed_type", "Inline");
+    embed.searchParams.set("hide_event_type_details", "1");
+    embed.searchParams.set("hide_gdpr_banner", "1");
+    cal.src = embed.toString();
+  }
+
+  const cta = document.querySelector(".hero-cta");
+  if (cta && base.booking_link) cta.setAttribute("href", base.booking_link);
+
+  console.log("Persona applied:", config);
+}
+
+(async function initPersona() {
+  const niche = getNicheFromURL();
+  const persona = await loadPersona(niche);
+  applyPersonaToUI(persona);
+})();
+
