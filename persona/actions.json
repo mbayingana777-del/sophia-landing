@@ -1,0 +1,27 @@
+{
+  "on_greeting": [
+    "Greet warmly",
+    "State role",
+    "Offer help"
+  ],
+  "on_collect_contact": [
+    "Ask for name",
+    "Ask for phone",
+    "Confirm spelling/number"
+  ],
+  "on_intent_detected": [
+    "If book_appointment → propose times or send booking link",
+    "If general_question → answer or escalate",
+    "If cancel/reschedule → verify identity then update"
+  ],
+  "on_consent_sms": [
+    "Explain SMS purpose",
+    "Ask permission",
+    "Log consent result"
+  ],
+  "on_wrap_up": [
+    "Summarize next steps",
+    "Confirm time/links",
+    "Thank them"
+  ]
+}
