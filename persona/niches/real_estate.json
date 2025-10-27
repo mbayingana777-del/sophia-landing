@@ -1,0 +1,20 @@
+{
+  "business_name": "Sophia Realty",
+  "sector": "real_estate",
+  "booking_link": "https://calendly.com/mbayingana777/property-tour",
+  "consent_required": true,
+  "faq": {
+    "services": "Property tours, listing consultations, and buyer discovery calls.",
+    "documents": "We never request signing documents in chat. Your agent shares those securely."
+  },
+  "intents": {
+    "book_appointment": {
+      "wording": [
+        "book a tour",
+        "schedule a showing",
+        "see a property",
+        "book consultation"
+      ]
+    }
+  }
+}
