@@ -1,3 +1,7 @@
+// ==== BACKEND PERSONA ENDPOINT (set this if your backend is deployed) ====
+const PERSONA_API_BASE = null; 
+// Example when deployed:  const PERSONA_API_BASE = "https://sophia-voice.onrender.com";
+
 // ===== CONFIG-DRIVEN PROFILES =====
 const PROFILES = {
   realestate: {
@@ -151,13 +155,116 @@ function wireLeadForm(){
 function setYear(){ const y = $('#year'); if (y) y.textContent = new Date().getFullYear(); }
 
 // ===== init =====
-document.addEventListener('DOMContentLoaded', () => {
-  applyBranding();
-  setYear();
-  wireButtons();
-  loadBooking();
-  wireLeadForm();
-  checkStatus();
+// ---- Persona params from URL (?niche=&packs=) ----
+function getPersonaParams() {
+  const url = new URL(window.location.href);
+  const niche = url.searchParams.get('niche') || '';
+  const packs = url.searchParams.get('packs') || '';
+  return { niche, packs };
+}
+
+// ---- Load persona from backend (if set) or local files ----
+async function loadPersonaData() {
+  const { niche, packs } = getPersonaParams();
+
+  // 1) Try backend if configured
+  if (PERSONA_API_BASE) {
+    try {
+      const qs = new URLSearchParams();
+      if (niche) qs.set('niche', niche);
+      if (packs) qs.set('packs', packs);
+      const resp = await fetch(`${PERSONA_API_BASE}/persona?${qs.toString()}`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!resp.ok) throw new Error(`Backend persona failed: ${resp.status}`);
+      const data = await resp.json();
+      console.info('[persona] loaded from backend', data);
+      return data;
+    } catch (e) {
+      console.warn('[persona] backend fetch failed, falling back to local files', e);
+    }
+  }
+
+  // 2) Fallback to local persona files
+  const base = await (await fetch('/persona/base.json')).json();
+  let merged = { ...base };
+
+  // optional niche override
+  if (niche) {
+    try {
+      const nicheJson = await (await fetch(`/persona/niches/${niche}.json`)).json();
+      merged = deepMerge(merged, nicheJson);
+      console.info('[persona] merged local niche', niche);
+    } catch (_) {
+      console.warn(`[persona] no local niche file found for '${niche}', skipping`);
+    }
+  }
+
+  // optional packs override (comma-separated)
+  if (packs) {
+    const list = packs.split(',').map(s => s.trim()).filter(Boolean);
+    for (const p of list) {
+      try {
+        const packJson = await (await fetch(`/persona/packs/${p}.json`)).json();
+        merged = deepMerge(merged, packJson);
+        console.info('[persona] merged local pack', p);
+      } catch (_) {
+        console.warn(`[persona] no local pack file found for '${p}', skipping`);
+      }
+    }
+  }
+
+  return merged;
+}
+
+// ---- tiny deep-merge helpers ----
+function deepMerge(target, source) {
+  if (Array.isArray(target) && Array.isArray(source)) return [...target, ...source];
+  if (isObj(target) && isObj(source)) {
+    const out = { ...target };
+    for (const k of Object.keys(source)) {
+      out[k] = k in out ? deepMerge(out[k], source[k]) : source[k];
+    }
+    return out;
+  }
+  return source;
+}
+function isObj(v) { return v && typeof v === 'object' && !Array.isArray(v); }
+
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const persona = await loadPersonaData();
+
+    // ——— Apply basic branding to hero ———
+    if (persona?.business_name) {
+      const h1 = document.querySelector('.hero-title');
+      if (h1) h1.textContent = `Meet ${persona.business_name.replace(/ Voice$/, '')}`;
+    }
+
+    if (persona?.brand?.tagline) {
+      const sub = document.querySelector('.hero-kicker');
+      if (sub) sub.innerHTML = persona.brand.tagline;
+    }
+
+    if (persona?.consent) {
+      const consentEl = document.querySelector('#consent-text');
+      if (consentEl) consentEl.textContent = persona.consent;
+    }
+
+    // ——— Keep your existing site wiring ———
+    applyBranding?.();
+    setYear?.();
+    wireButtons?.();
+    loadBooking?.();
+    wireLeadForm?.();
+    checkStatus?.();
+
+    console.log('[persona] init complete');
+  } catch (err) {
+    console.error('Persona init failed', err);
+  }
+});
+
 });
 
 
