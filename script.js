@@ -330,4 +330,26 @@ function applyPersonaToUI(config) {
   const persona = await loadPersona(niche);
   applyPersonaToUI(persona);
 })();
+// === Sophia Backend Connection Test ===
+const CFG = window.SOPHIA_CONFIG;
+
+async function checkBackend() {
+  try {
+    const res = await fetch(`${CFG.BACKEND_URL}/status`);
+    const data = await res.json();
+    if (data.ok) {
+      console.log("✅ Backend online:", data);
+      alert("Sophia backend is online!");
+    } else {
+      console.log("⚠️ Backend returned unexpected response:", data);
+      alert("Backend reachable, but not responding correctly.");
+    }
+  } catch (err) {
+    console.error("❌ Could not reach backend:", err);
+    alert("Backend offline or URL incorrect. Check config.js");
+  }
+}
+
+// Run check when page loads
+checkBackend();
 
