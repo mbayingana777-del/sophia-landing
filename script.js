@@ -130,3 +130,48 @@ function applyConsentFromPersona(p) {
 // (Where you currently log "Backend online" / "Persona: { ... }")
 applyBrandingFromPersona(window.persona);
 applyConsentFromPersona(window.persona);
+function wireChat() {
+  const input  = document.getElementById('chat-input');
+  const sendBtn= document.querySelector('#chat-box .chat-footer button');
+  const body   = document.querySelector('#chat-box .chat-body');
+
+  if (!input || !sendBtn || !body) return;
+
+  async function send() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    // render user bubble
+    appendBubble(body, text, 'user');
+    input.value = '';
+
+    try {
+      const niche = new URLSearchParams(location.search).get('niche') || '';
+      const r = await fetch(API('/chat'), {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({ message: text, niche })
+      });
+      const data = await r.json();
+
+      const reply = data?.reply || "I'm here—could you rephrase that?";
+      appendBubble(body, reply, 'bot');
+      body.scrollTop = body.scrollHeight;
+    } catch (e) {
+      console.error(e);
+      appendBubble(body, 'Network error—please try again in a moment.', 'bot');
+    }
+  }
+
+  sendBtn.addEventListener('click', send);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') send();
+  });
+}
+
+function appendBubble(container, text, who='bot') {
+  const p = document.createElement('p');
+  p.className = `bubble ${who}`;
+  p.textContent = text;
+  container.appendChild(p);
+}
