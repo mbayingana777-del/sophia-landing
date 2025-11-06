@@ -1,0 +1,6 @@
+<!-- save as assets/icons/google.svg (and twilio.svg/stripe.svg with different title) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+  <title>Placeholder Icon</title>
+  <circle cx="14" cy="14" r="13" stroke="#8A8F98" stroke-width="2"/>
+  <text x="50%" y="54%" text-anchor="middle" font-size="10" fill="#8A8F98" font-family="system-ui">Icon</text>
+</svg>
