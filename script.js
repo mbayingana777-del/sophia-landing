@@ -96,3 +96,37 @@ function enableChat() {
   if (!ok) return;
   await loadPersona();
 })();
+// 1) Apply brand + tagline to hero
+function applyBrandingFromPersona(p) {
+  const brand = p?.base?.brand?.name || p?.base?.business_name || 'Sophia';
+  const tagline = p?.base?.brand?.tagline || 'Your 24/7 AI receptionist that books, texts, and calls back instantly.';
+
+  // Headline
+  const heroTitle = document.querySelector('.hero-title');
+  if (heroTitle) heroTitle.textContent = `Meet ${brand}`;
+
+  // Subheadline/claim
+  const heroKicker = document.querySelector('.hero-kicker');
+  if (heroKicker) heroKicker.textContent = tagline;
+
+  // CTA (optional)
+  const cta = document.querySelector('.hero-cta');
+  if (cta && p?.base?.booking_link) {
+    cta.href = p.base.booking_link;
+    cta.textContent = 'Book a Demo';
+  }
+}
+
+// 2) Apply consent text to the consent paragraph
+function applyConsentFromPersona(p) {
+  const consentNode = document.querySelector('.consent-card p, .consent');
+  const consent = p?.base?.consent || p?.base?.legal?.consent;
+  if (consent && consentNode) {
+    consentNode.textContent = consent;
+  }
+}
+
+// Call these after persona is fetched
+// (Where you currently log "Backend online" / "Persona: { ... }")
+applyBrandingFromPersona(window.persona);
+applyConsentFromPersona(window.persona);
