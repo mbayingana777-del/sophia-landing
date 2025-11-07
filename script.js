@@ -175,3 +175,35 @@ function appendBubble(container, text, who='bot') {
   p.textContent = text;
   container.appendChild(p);
 }
+// =============== LEAD FORM SUBMISSION ==================
+const API = (p) => `${window.SOPHIA_CONFIG.API_BASE}${p}`;
+
+document.getElementById('leadForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('leadName').value.trim();
+  const phone = document.getElementById('leadPhone').value.trim();
+  const message = document.getElementById('leadMessage').value.trim();
+  const niche = new URLSearchParams(location.search).get('niche') || '';
+  const status = document.getElementById('leadMsg');
+
+  status.textContent = 'Sending…';
+
+  try {
+    const r = await fetch(API('/lead'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, message, niche })
+    });
+    const data = await r.json();
+    if (data.ok) {
+      status.textContent = 'Thanks! We’ll be in touch.';
+      e.target.reset();
+    } else {
+      status.textContent = 'Error submitting.';
+    }
+  } catch (err) {
+    console.error('Lead submit failed', err);
+    status.textContent = 'Network error. Try again.';
+  }
+});
